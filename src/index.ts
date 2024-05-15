@@ -3,9 +3,12 @@
 import { Command } from "commander";
 import {
   getAirQuality,
+  getFavorites,
   getForeCastWeather,
   getWeather,
+  saveFavorite,
 } from "./methods/getWeather.js";
+import chalk from "chalk";
 
 const program = new Command();
 
@@ -46,6 +49,23 @@ program
   )
   .action(function (location: string) {
     getAirQuality(location);
+  });
+
+program
+  .command("favorites")
+  .description("List all the favorite locations\nExample: weather favorites")
+  .action(() => {
+    getFavorites();
+  });
+
+program
+  .command("add-favorite <location>")
+  .description("Add a location to favorite\nExample: weather favorites nepal")
+  .action((location) => {
+    if (!location) {
+      console.log(chalk.red("Location field cannot be empty"));
+    }
+    saveFavorite(location);
   });
 
 program.parse(process.argv);

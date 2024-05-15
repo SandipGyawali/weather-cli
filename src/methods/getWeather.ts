@@ -2,6 +2,7 @@ import axios from "axios";
 import chalk from "chalk";
 import { displayForeCastInfo, displayWeatherInfo } from "./display.js";
 import { Coord } from "../interface/index.js";
+import fs from "fs";
 
 const API_KEY = "2aa8747dc962ec166dac3f5831abf7f2";
 const BASE_URL = "http://api.openweathermap.org";
@@ -50,6 +51,9 @@ export async function getForeCastWeather(location: string): Promise<void> {
   }
 }
 
+/**
+ * @param location
+ */
 export async function getAirQuality(location: string): Promise<void> {
   try {
     // Get the latitude and longitude for the location first
@@ -87,5 +91,33 @@ export async function getAirQuality(location: string): Promise<void> {
     console.log(result);
   } catch (error) {
     console.error(chalk.red(`Could not fetch air quality data: `) + error);
+  }
+}
+
+/**
+ * @Note get's all the favorite locations
+ */
+const favoriteFile: string = "./favorite.json";
+export async function getFavorites() {
+  let favorites: any = [];
+  if (fs.existsSync(favoriteFile)) {
+    favorites = JSON.parse(fs.readFileSync(favoriteFile, "utf-8"));
+    console.log(favorites);
+  } else {
+    console.log(chalk.yellow("No favorites location saved"));
+  }
+}
+
+export async function saveFavorite(location: string): Promise<void> {
+  let favorites = [];
+  if (fs.existsSync(favoriteFile)) {
+    favorites = JSON.parse(fs.readFileSync(favoriteFile, "utf8"));
+  }
+  if (!favorites.includes(location)) {
+    favorites.push(location);
+    fs.writeFileSync(favoriteFile, JSON.stringify(favorites, null, 2));
+    console.log(`${location} added to favorites.`);
+  } else {
+    console.log(`${location} is already in favorites.`);
   }
 }
