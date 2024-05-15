@@ -1,6 +1,10 @@
 import axios from "axios";
 import chalk from "chalk";
-import { displayForeCastInfo, displayWeatherInfo } from "./display.js";
+import {
+  displayAirQuality,
+  displayForeCastInfo,
+  displayWeatherInfo,
+} from "./display.js";
 import { Coord } from "../interface/index.js";
 import fs from "fs";
 
@@ -69,26 +73,7 @@ export async function getAirQuality(location: string): Promise<void> {
       throw new Error();
     }
 
-    const { main, components } = response.data.list[0];
-
-    const AQI: number = main?.aqi;
-    const PM2_5: number = components?.pm2_5;
-    const PM10: number = components?.pm10;
-    const O3: number = components?.o3;
-
-    const result: {
-      AQI: number;
-      PM2_5: number;
-      PM10: number;
-      O3: number;
-    } = {
-      AQI,
-      PM2_5,
-      PM10,
-      O3,
-    };
-
-    console.log(result);
+    displayAirQuality(response);
   } catch (error) {
     console.error(chalk.red(`Could not fetch air quality data: `) + error);
   }

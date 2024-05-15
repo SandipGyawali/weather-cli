@@ -1,3 +1,4 @@
+import chalk from "chalk";
 import { ApiResponseInterface } from "../interface/index.js";
 
 /**
@@ -55,4 +56,32 @@ export function displayForeCastInfo(response: Array<ApiResponseInterface>) {
   });
 
   console.log(all);
+}
+
+export function displayAirQuality(response: any): void {
+  if (!response || response == null) {
+    console.log(chalk.red("Response cannot be empty in displayAirQuality"));
+    return;
+  }
+
+  const { main, components } = response.data.list[0];
+
+  const AQI: number = main?.aqi;
+  const PM2_5: number = components?.pm2_5;
+  const PM10: number = components?.pm10;
+  const O3: number = components?.o3;
+
+  const result: {
+    AQI: number;
+    PM2_5: number;
+    PM10: number;
+    O3: number;
+  } = {
+    AQI,
+    PM2_5,
+    PM10,
+    O3,
+  };
+
+  console.log(result);
 }
