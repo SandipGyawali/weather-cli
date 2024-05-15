@@ -34,3 +34,8 @@ export interface ApiResponseInterface {
   visibility: number;
   dt_txt?: string;
 }
+
+export interface AirQuality {
+  main: Object;
+  components: Object;
+}
